@@ -62,13 +62,16 @@ public class QueryReader {
 
     public static void main(String[] args) throws IOException {
 
+        
+        // create query at https://api.stackexchange.com/docs/users
+        // as example selected query contains 15 users with every variable
         String query = "https://api.stackexchange.com/2.2/users?pagesize=15&fromdate=1298764800&todate=1298851200&order=desc&sort=reputation&site=stackoverflow&filter=!4(Yrwr)8xrv7I(d0_";
 
         String json = readUrl(query);
         Page page = new Gson().fromJson(json, Page.class);
 
 
-
+        // iterates through .json output and displays selected data(as exapmle shows account id, location and age)
         for (Item item : page.items)
             System.out.println("Username: " + item.account_id + ", Location: " + item.location  + ", Age: " + item.age);
     }
