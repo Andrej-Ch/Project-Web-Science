@@ -7,6 +7,12 @@ import java.net.URL;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+
+/* Query Reader client allows us to receive data from StackExchange API and show it on console.
+* Only works with user data for now
+* with some adjustements it is possible to output data into text/csv file, or assign it to objects and further manipulate it
+*/
+
 public class QueryReader {
 
 
