@@ -7,9 +7,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
-/**
- * Created by Andro on 30-Apr-17.
- */
 public class Answers {
 
     private static String readUrl(String query) throws IOException {
