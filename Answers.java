@@ -1,7 +1,5 @@
-package StackOverflow;
 
 import com.google.gson.Gson;
-
 import java.io.*;
 import java.net.URL;
 import java.util.List;
@@ -80,9 +78,8 @@ public class Answers {
         String csvFile = "Question_IDs.csv";
         BufferedReader br = null;
         String line = "";
-        String cvsSplitBy = ",";
+        String cvsSplitBy = ";";
 
-        String q = "";
 
         PrintWriter pw = new PrintWriter(new File("Answer_IDs.csv"));
         StringBuilder sb = new StringBuilder();
@@ -92,22 +89,25 @@ public class Answers {
             br = new BufferedReader(new FileReader(csvFile));
             while ((line = br.readLine()) != null) {
 
+
                 String[] questionID = line.split(cvsSplitBy);
 
-                query = "https://api.stackexchange.com/2.2/questions/"+questionID[0]+"/answers?order=desc&sort=activity&site=stackoverflow&filter=!1zSsisBB8s2GFyJI4JT0.&key=YOsp)YsweXtZMdqoUDFv6w((";
+                for (int i = 0; i < questionID.length; i++) {
 
-                String json = readUrl(query);
-                Page page = new Gson().fromJson(json, Page.class);
+                    query = "https://api.stackexchange.com/2.2/questions/" + questionID[i] + "/answers?order=desc&sort=activity&site=stackoverflow&filter=!1zSsisBB8s2GFyJI4JT0.&key=YOsp)YsweXtZMdqoUDFv6w((";
 
-                sb.append("Question ID: "+questionID[0]+"\n");
 
-                for (Item item : page.items) {
-                    sb.append(item.answer_id);
-                    sb.append(",");
-                    sb.append('\n');
+                    String json = readUrl(query);
+                    Page page = new Gson().fromJson(json, Page.class);
+
+                    sb.append(questionID[i]+";");
+
+                    for (Item item : page.items) {
+                        sb.append(item.answer_id);
+                        sb.append(";");
+                    }
+                    sb.append("\n");
                 }
-                sb.append("\n");
-
 
             }
             pw.write(sb.toString());
