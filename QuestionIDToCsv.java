@@ -7,6 +7,9 @@ import java.net.URL;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+/**
+ * Created by Andro on 05-May-17.
+ */
 public class QuestionIDToCsv {
 
 
@@ -66,7 +69,7 @@ public class QuestionIDToCsv {
 
     public static void main(String[] args) throws IOException {
 
-        String query = "https://api.stackexchange.com/2.2/questions?pagesize=10&order=desc&min=200&sort=votes&site=stackoverflow&filter=!2.dt38CU)6yRIbWVfDpQc";
+        String query = "https://api.stackexchange.com/2.2/questions?pagesize=10&order=desc&min=200&sort=votes&site=stackoverflow&filter=!2.dt38CU)6yRIbWVfDpQc&key=YOsp)YsweXtZMdqoUDFv6w((";
 
         String json = readUrl(query);
         Page page = new Gson().fromJson(json, Page.class);
@@ -74,12 +77,14 @@ public class QuestionIDToCsv {
         PrintWriter pw = new PrintWriter(new File("Question_IDs.csv"));
         StringBuilder sb = new StringBuilder();
 
-        for (Item item : page.items) {
-            sb.append(item.question_id);
-            sb.append(",");
-            sb.append('\n');
-        }
+        String s = "";
 
+        for (Item item : page.items) {
+            s = s + item.question_id + ";";
+            
+            System.out.println(s);
+        }
+        sb.append(s);
         pw.write(sb.toString());
         pw.close();
         System.out.println("List of question IDs saved as \"Question_IDs.csv\"");
