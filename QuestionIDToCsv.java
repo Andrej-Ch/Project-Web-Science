@@ -7,9 +7,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
-/**
- * Created by Andro on 05-May-17.
- */
 public class QuestionIDToCsv {
 
 
