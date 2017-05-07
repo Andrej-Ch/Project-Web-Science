@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 public class Answers {
+    public static String[] ownersCountry;
 
     private static String readUrl(String query) throws IOException {
 
@@ -54,13 +55,13 @@ public class Answers {
                 "KY","LA","MA","MD","ME","MH","MI","MN","MO","MS","MT",
                 "NC","ND","NE","NH","NJ","NM","NV","NY", "OH","OK","OR",
                 "PA","PR","PW","RI","SC","SD","TN","TX","UT","VA","VI",
-                "VT","WA","WI","WV","WY", "Massachusetts", "Seattle", "California", "Hampshire", "USA" };
+                "VT","WA","WI","WV","WY", "Massachusetts", "Seattle", "California", "Hampshire", "USA", "Florida", "Carolina","York" };
         for(int i =  0; i < states.length; i++){
             statesList.add(states[i]);
         }
 
         List<String> ignoreList = new ArrayList<String>();          // list of undesirable outputs
-        String[] toIgnore = { "Virtual", "git.ninja", "北京","PH", "Earth", "Europe", "moon", "Everywhere", "cloud&quot;", "T&#252;rkiy", "T&#252;rkiye", "&#39;Straya", "Kerala, India", "Project" };
+        String[] toIgnore = { "Virtual", "git.ninja", "北京", "here!", "PH", "Earth", "Europe", "moon", "Africa", "IDE", "Everywhere", "cloud&quot;", "T&#252;rkiy", "T&#252;rkiye", "&#39;Straya", "Kerala, India", "Project" };
         for(int i =  0; i < toIgnore.length; i++){
             ignoreList.add(toIgnore[i]);
         }
@@ -93,11 +94,12 @@ public class Answers {
         String query = "";
         String csvFile = "Question_IDs.csv";
         String csvFile2 = "Question_Owner_Location.csv";
+        String csvFile3 = "Answer_IDs.csv";
         BufferedReader br = null;
         BufferedReader br2 = null;
         String line = "";
         String cvsSplitBy = ";";
-        String[] ownersCountry = new String[2];
+
 
 
         PrintWriter pw = new PrintWriter(new File("Answer_IDs.csv"));
@@ -144,7 +146,7 @@ public class Answers {
                     String json = readUrl(query);
                     Page page = new Gson().fromJson(json, Page.class);
                     sb.append(ownersCountry[i]+";");
-                    System.out.println(ownersCountry[i]);
+
 
 
                     for (Item item : page.items) {
@@ -165,6 +167,14 @@ public class Answers {
                                             output = "States";
                                          }
 
+                                     if(output.equals("States")){
+                                        output = "USA";
+                                     }
+
+                                     if (output.equals("Kingdom")){
+                                        output = "UK";
+                                     }
+
                                     for(String ignore: ignoreList) {  // ignore all outputs of undesirable values
                                         if(ignore.trim().contains(output))
                                             output = "";
@@ -175,7 +185,7 @@ public class Answers {
 
                                        }
                                    }*/
-
+                                    System.out.println(output);
                                        if (output != ""){
                                        //System.out.println(output);
                                        sb.append(output);
@@ -207,7 +217,59 @@ public class Answers {
         }
         pw.close();
 
-        System.out.println("List of Locations IDs saved as \"Answer_IDs.csv\"");
+        System.out.println("Done!");
 
+        PrintWriter writer = new PrintWriter(new File("Data_Pool.csv"));
+        StringBuilder builder = new StringBuilder();
+
+        BufferedReader reader = null;
+
+        String cvsSplit = "\n";
+        List<String> list = new ArrayList<>();
+        List<String> toRemove = new ArrayList<>();
+
+        try {
+
+            reader = new BufferedReader(new FileReader(csvFile3));
+            while ((line = reader.readLine()) != null) {
+
+
+                String[] array = line.split(cvsSplit);
+
+                for (int i = 0; i < array.length; i++) {
+                    String s = array[i];
+                    list.add(s);
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }}}
+
+        for (String s : list) {
+            if (s.startsWith("null")) {
+                toRemove.add(s);
+            }
+        }
+        list.removeAll(toRemove);
+
+        int count = 0;
+        for (String l : list){
+
+            builder.append(list.get(count));
+            builder.append("\n");
+            count++;
+        }
+
+        writer.write(builder.toString());
+        writer.close();
     }
 }
