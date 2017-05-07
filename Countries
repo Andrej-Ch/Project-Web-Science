@@ -140,7 +140,7 @@ public class Answers {
                                             output = "";
                                     }
 
-/*                                    for(String country: countriesList) {  // change state names to States (USA)
+/*                                    for(String country: countriesList) {  //
                                         if((country.trim().contains(output))== false)
                                             output = "XXXXXXX";
 
