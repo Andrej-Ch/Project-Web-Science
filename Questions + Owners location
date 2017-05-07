@@ -4,12 +4,11 @@ import com.google.gson.Gson;
 
 import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
-/**
- * Created by Andro on 05-May-17.
- */
+
 public class Questions {
 
 
@@ -82,8 +81,20 @@ public class Questions {
 
     public static void main(String[] args) throws IOException {
 
+
+        List<String> statesList = new ArrayList<String>();                      //Create a list of USA states
+        String[] states = { "AK","AL","AR","AZ","CA","CO","CT","DC",
+                "DE","FL","GA","GU","HI","IA","ID", "IL","IN","KS",
+                "KY","LA","MA","MD","ME","MH","MI","MN","MO","MS","MT",
+                "NC","ND","NE","NH","NJ","NM","NV","NY", "OH","OK","OR",
+                "PA","PR","PW","RI","SC","SD","TN","TX","UT","VA","VI",
+                "VT","WA","WI","WV","WY", "Massachusetts", "Seattle", "California", "Hampshire", "USA" };
+        for(int i =  0; i < states.length; i++){
+            statesList.add(states[i]);
+        }
+
         //String query = "https://api.stackexchange.com/2.2/questions?pagesize=10&order=desc&min=200&sort=votes&site=stackoverflow&filter=!2.dt38CU)6yRIbWVfDpQc&key=YOsp)YsweXtZMdqoUDFv6w((";
-        String query = "https://api.stackexchange.com/2.2/questions?pagesize=10&order=desc&min=200&sort=votes&site=stackoverflow&filter=!g9V1zw-7RMXL9)e7mhQqd-p*e7SeJTNp.go&key=YOsp)YsweXtZMdqoUDFv6w((";
+        String query = "https://api.stackexchange.com/2.2/questions?pagesize=3&order=desc&min=200&sort=votes&site=stackoverflow&filter=!g9V1zw-7RMXL9)e7mhQqd-p*e7SeJTNp.go&key=YOsp)YsweXtZMdqoUDFv6w((";
 
         String json = readUrl(query);
         Page page = new Gson().fromJson(json, Page.class);
@@ -111,18 +122,30 @@ public class Questions {
             if (item.owner.user_id != null) {
                 String queryUser = "https://api.stackexchange.com/2.2/users/" + item.owner.user_id + "?order=desc&sort=reputation&site=stackoverflow&filter=!23IkMbZQw76oILMeqALl.&key=YOsp)YsweXtZMdqoUDFv6w((";
 
-                System.out.println(queryUser);
                 String jsonUser = readUrl(queryUser);
                 Users users = new Gson().fromJson(jsonUser, Users.class);
+
                 output = users.items.get(0).location;
 
+                if (output == null){
+                    output = "null";
+                }
+
+                output = output.substring(output.lastIndexOf(" ")+1);
+
+                for(String str: statesList) {  // change state names to States (USA)
+                    if(str.trim().contains(output))
+                        output = "States";
+                }
+
+                System.out.println(output);
 
                     sb2.append(output);
                     sb2.append(";");
                 }
-                pw2.write(sb2.toString());
-            }
 
+            }
+        pw2.write(sb2.toString());
             pw2.close();
 
 
