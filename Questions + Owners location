@@ -10,7 +10,7 @@ import java.util.zip.GZIPInputStream;
 /**
  * Created by Andro on 05-May-17.
  */
-public class QuestionIDToCsv {
+public class Questions {
 
 
     private static String readUrl(String query) throws IOException {
@@ -26,6 +26,11 @@ public class QuestionIDToCsv {
     }
 
     static class Item {
+
+        class Owner{
+            String user_id;
+        }
+        Owner owner;
         String accepted_answer_id;
         String answer_count;
         String answers;
@@ -58,6 +63,7 @@ public class QuestionIDToCsv {
         String tags;
         String title;
         String up_vote_count;
+        String user_id;
         String upvoted;
         String view_count;
 
@@ -67,26 +73,61 @@ public class QuestionIDToCsv {
         List<Item> items;
     }
 
+    class Users {
+        List<User> items;
+    }
+    static class User{
+        String location;
+    }
+
     public static void main(String[] args) throws IOException {
 
-        String query = "https://api.stackexchange.com/2.2/questions?pagesize=10&order=desc&min=200&sort=votes&site=stackoverflow&filter=!2.dt38CU)6yRIbWVfDpQc&key=YOsp)YsweXtZMdqoUDFv6w((";
+        //String query = "https://api.stackexchange.com/2.2/questions?pagesize=10&order=desc&min=200&sort=votes&site=stackoverflow&filter=!2.dt38CU)6yRIbWVfDpQc&key=YOsp)YsweXtZMdqoUDFv6w((";
+        String query = "https://api.stackexchange.com/2.2/questions?pagesize=10&order=desc&min=200&sort=votes&site=stackoverflow&filter=!g9V1zw-7RMXL9)e7mhQqd-p*e7SeJTNp.go&key=YOsp)YsweXtZMdqoUDFv6w((";
 
         String json = readUrl(query);
         Page page = new Gson().fromJson(json, Page.class);
 
         PrintWriter pw = new PrintWriter(new File("Question_IDs.csv"));
+        PrintWriter pw2 = new PrintWriter(new File("Question_Owner_Location.csv"));
         StringBuilder sb = new StringBuilder();
+        StringBuilder sb2 = new StringBuilder();
 
         String s = "";
+        String s2 = "";
+
 
         for (Item item : page.items) {
             s = s + item.question_id + ";";
-            
-            System.out.println(s);
         }
+
         sb.append(s);
         pw.write(sb.toString());
         pw.close();
-        System.out.println("List of question IDs saved as \"Question_IDs.csv\"");
+
+
+        String output = "";
+        for (Item item : page.items) {
+            if (item.owner.user_id != null) {
+                String queryUser = "https://api.stackexchange.com/2.2/users/" + item.owner.user_id + "?order=desc&sort=reputation&site=stackoverflow&filter=!23IkMbZQw76oILMeqALl.&key=YOsp)YsweXtZMdqoUDFv6w((";
+
+                System.out.println(queryUser);
+                String jsonUser = readUrl(queryUser);
+                Users users = new Gson().fromJson(jsonUser, Users.class);
+                output = users.items.get(0).location;
+
+
+                    sb2.append(output);
+                    sb2.append(";");
+                }
+                pw2.write(sb2.toString());
+            }
+
+            pw2.close();
+
+
+
+        }
+
     }
-}
+
