@@ -92,13 +92,40 @@ public class Answers {
 
         String query = "";
         String csvFile = "Question_IDs.csv";
+        String csvFile2 = "Question_Owner_Location.csv";
         BufferedReader br = null;
+        BufferedReader br2 = null;
         String line = "";
         String cvsSplitBy = ";";
+        String[] ownersCountry = new String[2];
 
 
         PrintWriter pw = new PrintWriter(new File("Answer_IDs.csv"));
         StringBuilder sb = new StringBuilder();
+
+        try {
+
+            br2 = new BufferedReader(new FileReader(csvFile2));
+            while ((line = br2.readLine()) != null) {
+                
+                ownersCountry = line.split(cvsSplitBy);
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }}
+
+
 
         try {
 
@@ -107,8 +134,7 @@ public class Answers {
 
 
                 String[] questionID = line.split(cvsSplitBy);
-
-                String[] ownerLocation = line.split(cvsSplitBy);
+                
 
                 for (int i = 0; i < questionID.length; i++) {
 
@@ -117,7 +143,8 @@ public class Answers {
 
                     String json = readUrl(query);
                     Page page = new Gson().fromJson(json, Page.class);
-                    sb.append(questionID[i]+";");
+                    sb.append(ownersCountry[i]+";");
+                    System.out.println(ownersCountry[i]);
 
 
                     for (Item item : page.items) {
@@ -150,7 +177,7 @@ public class Answers {
                                    }*/
 
                                        if (output != ""){
-                                       System.out.println(output);
+                                       //System.out.println(output);
                                        sb.append(output);
                                        sb.append(";");
                                         }
