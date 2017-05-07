@@ -30,41 +30,9 @@ public class Questions {
             String user_id;
         }
         Owner owner;
-        String accepted_answer_id;
-        String answer_count;
-        String answers;
-        String body;
-        String closed_date;
-        //String closed_details (closed_details);
-        String comment_count;
-        String comments;
-        String creation_date;
-        String delete_vote_count;
-        String down_vote_count;
-        String downvoted;
-        String favorite_count;
-        String favorited;
-        String is_answered;
-        String last_activity_date;
-        String last_edit_date;
-        //String last_editor (shallow_user);
-        String link;
-        String locked_date;
-        //String migrated_from (migration_info);
-        //String migrated_to (migration_info);
-        //String notice (notice);
-        //String owner (shallow_user);
-        String protected_date;
+
         String question_id;
-        String reopen_vote_count;
-        String score;
-        String share_link;
-        String tags;
-        String title;
-        String up_vote_count;
-        String user_id;
-        String upvoted;
-        String view_count;
+
 
     }
 
@@ -88,13 +56,13 @@ public class Questions {
                 "KY","LA","MA","MD","ME","MH","MI","MN","MO","MS","MT",
                 "NC","ND","NE","NH","NJ","NM","NV","NY", "OH","OK","OR",
                 "PA","PR","PW","RI","SC","SD","TN","TX","UT","VA","VI",
-                "VT","WA","WI","WV","WY", "Massachusetts", "Seattle", "California", "Hampshire", "USA" };
+                "VT","WA","WI","WV","WY", "Massachusetts", "Seattle", "California", "Hampshire", "USA", "Ohio" };
         for(int i =  0; i < states.length; i++){
             statesList.add(states[i]);
         }
 
         //String query = "https://api.stackexchange.com/2.2/questions?pagesize=10&order=desc&min=200&sort=votes&site=stackoverflow&filter=!2.dt38CU)6yRIbWVfDpQc&key=YOsp)YsweXtZMdqoUDFv6w((";
-        String query = "https://api.stackexchange.com/2.2/questions?pagesize=3&order=desc&min=200&sort=votes&site=stackoverflow&filter=!g9V1zw-7RMXL9)e7mhQqd-p*e7SeJTNp.go&key=YOsp)YsweXtZMdqoUDFv6w((";
+        String query = "https://api.stackexchange.com/2.2/questions?pagesize=25&order=desc&min=200&sort=votes&site=stackoverflow&filter=!g9V1zw-7RMXL9)e7mhQqd-p*e7SeJTNp.go&key=YOsp)YsweXtZMdqoUDFv6w((";
 
         String json = readUrl(query);
         Page page = new Gson().fromJson(json, Page.class);
@@ -148,6 +116,8 @@ public class Questions {
         pw2.write(sb2.toString());
             pw2.close();
 
+
+        System.out.println("Done");
 
 
         }
